@@ -6,13 +6,6 @@ Este documento apresenta a especificação arquitetural completa da aplicação 
 
 ## 1. Visão Geral da Arquitetura (MVC)
 
-A aplicação adota uma divisão em camadas com responsabilidades bem isoladas:
-- **Router / Application Entrypoint ([`app.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/app.py))**: Configura a instância do Flask, define o diretório de templates (`template_folder='views'`) e mapeia as URLs HTTP para as funções de controle.
-- **Controller ([`controllers/student_controller.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/controllers/student_controller.py))**: Camada intermediária que processa as requisições HTTP, coordena a lógica chamando o Model e seleciona a View correspondente ou executa redirecionamento.
-- **Model ([`models/student.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py))**: Encapsula as entidades de domínio ([`Student`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py#L3-L7)) e o padrão de acesso a dados / DAO ([`StudentModel`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py#L9-L46)) conectado ao SQLite.
-- **View ([`views/`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/views/))**: Arquivos HTML com a sintaxe de template Jinja2 para apresentação ao usuário final.
-- **Persistência (`students.db`)**: Banco de dados relacional SQLite armazenado localmente em arquivo.
-
 ```mermaid
 graph TD
     Client["👤 Usuário / Navegador Web"]
@@ -244,26 +237,3 @@ erDiagram
         TEXT course "NOT NULL"
     }
 ```
-
----
-
-## 5. Matriz de Endpoints e Roteamento
-
-| Rota | Método HTTP | Handler no Controller | Parâmetros de Entrada | Saída / Resposta |
-| :--- | :--- | :--- | :--- | :--- |
-| `/` | `GET` | [`student_controller.index()`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/controllers/student_controller.py#L4-L10) | Nenhum | `200 OK` com [`views/index.html`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/views/index.html) (`students=List[Student]`) |
-| `/add` | `GET` | [`student_controller.add_student()`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/controllers/student_controller.py#L12-L24) | Nenhum | `200 OK` com [`views/add.html`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/views/add.html) |
-| `/add` | `POST` | [`student_controller.add_student()`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/controllers/student_controller.py#L12-L24) | `name` (str), `course` (str) via form | `302 Found` (Redirect para `/`) |
-
----
-
-## 6. Mapeamento de Arquivos e Padrões de Projeto
-
-| Camada | Arquivo / Componente | Papel no MVC | Padrões & Responsabilidades |
-| :--- | :--- | :--- | :--- |
-| **Router** | [`app.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/app.py) | Ponto de Entrada / Front Router | Inicializa o servidor Flask, configura `template_folder='views'` e associa URLs às ações do controlador. |
-| **Controller** | [`controllers/student_controller.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/controllers/student_controller.py) | Controlador | Intermedia fluxos HTTP, consome o Model e aplica o padrão **Post/Redirect/Get (PRG)**. |
-| **Model** | [`models/student.py`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py) | Modelo & DAO | Implementa a entidade de domínio [`Student`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py#L3-L7) e o padrão **Data Access Object (DAO)** com [`StudentModel`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/models/student.py#L9-L46) exportando uma instância compartilhada (`db`). |
-| **View** | [`views/index.html`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/views/index.html) | Visão | Renderiza a tabela de alunos com verificação de lista vazia (`{% for %}` ... `{% else %}`). |
-| **View** | [`views/add.html`](file:///C:/Users/User/OneDrive/Desktop/Faculdade/Padr%C3%B5es%20de%20Arquitetura%20de%20Software/Atividades/PAS-Faculdade/atv-02-mvc/views/add.html) | Visão | Renderiza o formulário de cadastro com botão de salvar e voltar. |
-| **Storage** | `students.db` | Persistência | Banco de dados relacional SQLite em arquivo com criação automática de tabela no boot. |
