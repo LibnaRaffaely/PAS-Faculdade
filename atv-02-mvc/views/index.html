@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro de Alunos</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 50%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 10px 15px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Lista de Alunos</h1>
+    
+    <a href="/add" class="btn">Adicionar Novo Aluno</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Curso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.id }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.course }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Nenhum aluno cadastrado no momento.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

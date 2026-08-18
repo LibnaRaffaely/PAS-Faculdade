@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Aluno</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"] { padding: 8px; width: 300px; }
+        .btn { padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-back { padding: 10px 15px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Adicionar Novo Aluno</h1>
+    
+    <form method="POST" action="/add">
+        <div class="form-group">
+            <label for="name">Nome do Aluno:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="course">Curso:</label>
+            <input type="text" id="course" name="course" required>
+        </div>
+        
+        <button type="submit" class="btn">Salvar</button>
+        <a href="/" class="btn-back">Voltar</a>
+    </form>
+</body>
+</html>
